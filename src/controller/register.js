@@ -35,17 +35,16 @@ exports.listUser = async (req, res, next) => {
 exports.login = async (req, res, next) => {
     await users.findOne({ where: { email: req.body.email } })
         .then(user => {
-            if (!user) return res.json('user was not found')
-            req.sessioncookie.user = user
-            if (!decryptPass(req.body.password, user.password)) return res.json('invalid password')
+            if (!user) return res.json({error: 'user was not found'})
+            if (!decryptPass(req.body.password, user.password)) return res.json({error: 'invalid password'})
             const token = jwt.sign({ email: req.body.email }, jwtConfig.secretKey, { expiresIn: '5m' })
-            res.json({token: token})
+            res.json({token: token, user: user})
         })
         .catch(err => {
             if (err instanceof ValidationError) {
-                return res.json(err)
+                return res.json({error: err})
             }
-            return res.json(err)
+            return res.json({error: err})
         })
 }
 

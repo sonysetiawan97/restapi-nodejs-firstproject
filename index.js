@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const multer = require('multer')
 const config = require('./config')()
 const session = require('client-sessions')
+const cors = require('cors')
 
 // route
 const api = require('./src/routes/api')
@@ -22,6 +23,8 @@ app.use(session({
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(upload.array())
+
+app.use(cors())
 
 app.use('/api/v1', api)
 app.use('/api/user/v1', register)
