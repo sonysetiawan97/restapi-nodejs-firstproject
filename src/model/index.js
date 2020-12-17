@@ -13,6 +13,12 @@ const usersModel = require('./collection/users')
 const books = booksModel(sequelize, Sequelize)
 const users = usersModel(sequelize, Sequelize)
 
+users.hasMany(books)
+books.belongsTo(users)
+
+// users.belongsToMany(books, { through: 'usersbooks' })
+// books.belongsToMany(users, { through: 'usersbooks' })
+
 sequelize.sync().then(() => {
     console.log('database created')
 }).catch((err) => {

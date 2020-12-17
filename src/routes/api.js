@@ -4,8 +4,8 @@ const router = express.Router()
 //controller
 const bookController = require('../controller/books')
 
-// middleware
-const jwtAuth = require('../middleware/jwt')
+// auth
+const jwtAuth = require('../auth/jwt')
 
 // no auth
 router.get('/test', (req, res, next) => {

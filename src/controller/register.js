@@ -2,8 +2,7 @@ const { users } = require('../model/index')
 const { ValidationError, json } = require('sequelize')
 const jwt = require('jsonwebtoken')
 const jwtConfig = require('../../config/jwttoken')
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const bcrypt = require('bcrypt')
 
 exports.register = async (req, res, next) => {
     try {
@@ -37,9 +36,10 @@ exports.login = async (req, res, next) => {
     await users.findOne({ where: { email: req.body.email } })
         .then(user => {
             if (!user) return res.json('user was not found')
+            req.sessioncookie.user = user
             if (!decryptPass(req.body.password, user.password)) return res.json('invalid password')
-            const token = jwt.sign({ email: req.body.email }, jwtConfig.secretKey, { expiresIn: '15m' })
-            res.json(token)
+            const token = jwt.sign({ email: req.body.email }, jwtConfig.secretKey, { expiresIn: '5m' })
+            res.json({token: token})
         })
         .catch(err => {
             if (err instanceof ValidationError) {
@@ -50,7 +50,7 @@ exports.login = async (req, res, next) => {
 }
 
 const encryptPass = (pass) => {
-    return bcrypt.hashSync(pass, saltRounds);
+    return bcrypt.hashSync(pass, 10)
 }
 
 const decryptPass = (passInput, passStore) => {

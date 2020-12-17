@@ -1,11 +1,12 @@
-const { books } = require('../model/index')
+const { books, users } = require('../model/index')
 const { ValidationError } = require('sequelize');
 
 exports.bookList = async (req, res, next) => {
-    await books.findAll()
+    await books.findAll(
+    )
         .then(books => {
             if (books.length == 0) res.json('books was not found')
-            else res.json(books)
+            else res.json({entries: books, user: req.sessioncookie.user})
         }).catch((err) => {
             if (err instanceof ValidationError) {
                 return res.json(err)
@@ -31,7 +32,7 @@ exports.bookRead = async (req, res, next) => {
     await books.findByPk(req.params.id)
         .then(book => {
             if (book === null) return res.json('book was not found')
-            else res.json(book)
+            else res.json({entries: books, user: req.sessioncookie.user})
         }).catch((err) => {
             if (err instanceof ValidationError) {
                 return res.json(err)
@@ -66,7 +67,7 @@ exports.bookUpdate = async (req, res, next) => {
 exports.bookDelete = async (req, res, next) => {
     await books.findByPk(req.params.id)
         .then(book => {
-            if (book === null) return res.json('book was not found for update')
+            if (book === null) return res.json('book was not found for delete')
         })
     await books.destroy({
         where: {
