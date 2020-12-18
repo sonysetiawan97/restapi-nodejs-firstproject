@@ -51,11 +51,14 @@ export default {
       Login.signin(data)
         .then((response) => {
           if (response.data.error) return console.log(response.data.error);
-          this.$cookie.set("token", response.data.token, 1);
-          this.$cookie.set("user", JSON.stringify(response.data.user), 1);
+          this.$cookie.set("token", response.data.token, { expires: "10m" });
+          this.$cookie.set(
+            "user",
+            JSON.stringify(response.data.user, { expires: "10m" })
+          );
           if (this.$cookie.get("token")) {
             this.$emit("loggedIn");
-            this.$router.push('book')
+            this.$router.push("book");
           }
         })
         .catch((e) => {

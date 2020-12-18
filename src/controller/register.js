@@ -37,7 +37,7 @@ exports.login = async (req, res, next) => {
         .then(user => {
             if (!user) return res.json({error: 'user was not found'})
             if (!decryptPass(req.body.password, user.password)) return res.json({error: 'invalid password'})
-            const token = jwt.sign({ email: req.body.email }, jwtConfig.secretKey, { expiresIn: '5m' })
+            const token = jwt.sign({ email: req.body.email }, jwtConfig.secretKey, { expiresIn: '10m' })
             res.json({token: token, user: user})
         })
         .catch(err => {

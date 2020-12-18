@@ -6,7 +6,7 @@ exports.bookList = async (req, res, next) => {
     )
         .then(books => {
             if (books.length == 0) res.json('books was not found')
-            else res.json({entries: books, user: req.sessioncookie.user})
+            else res.json({entries: books})
         }).catch((err) => {
             if (err instanceof ValidationError) {
                 return res.json(err)

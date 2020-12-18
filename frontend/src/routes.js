@@ -8,6 +8,11 @@ let router = new Router({
     mode: 'history',
     routes: [
         {
+            path: '/',
+            name: 'HelloWorld',
+            component: () => import('./components/HelloWorld.vue')
+        },
+        {
             path: '/login',
             name: 'login',
             component: () => import('./components/login/login.vue'),
